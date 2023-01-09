@@ -40,7 +40,7 @@ export const WeatherPage = () => {
             {weather &&
                 <div className="weather-box">
                     <h2>{weather.name}-{weather.sys.country}</h2>
-                    <div className="condition-row"><span>{weather.main.temp}&deg;</span><span>{weather.weather[0].description}</span><img src={"http://openweathermap.org/img/wn/" + weather.weather[0].icon + ".png"} alt="icon" /></div>
+                    <div className="condition-row"><span>{Math.round((weather.main.temp - 32) * 5/9)}&deg;</span><span>{weather.weather[0].description}</span><img src={"http://openweathermap.org/img/wn/" + weather.weather[0].icon + ".png"} alt="icon" /></div>
                     <hr />
                     <div>Humidity Levels at {weather.main.humidity}%</div>
                     <div style={{marginTop: '8px'}}>Winds at {weather.wind.speed} m/s</div>
