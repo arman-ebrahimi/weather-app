@@ -31,6 +31,23 @@ export const WeatherPage = () => {
     },[weather])
 
     let climate = weather && weather.weather[0].main;
+    useEffect(() => {
+        let srcAudio;
+        switch (climate) {
+            case "Rain":
+                srcAudio = "";
+                break;
+            case "Thunderstorm":
+                srcAudio = "";
+                break;
+            case "Tornado":
+            case "Squall ":
+                srcAudio = "";
+                break;
+            default:
+                break;
+        }
+    }, [climate])
     return(
         <div className={`weather-page ${weather && climate === "Clear" ? "clear" : weather && climate === "Clouds" ? "cloudy" : weather && (climate === "Rain" || climate === "Drizzle") ? "rainy" : weather && climate === "Thunderstorm" ? "thunder" : weather && climate === "Snow" ? "snow" : weather && (climate === "Fog" || climate === "Mist" || climate === "Haze") ? "foggy" : weather && climate === "Dust" ? "dust" : weather && (climate === "Tornado" || climate === "Squall") ? "tornado" : ""}`}>
             <div className="search-box">
