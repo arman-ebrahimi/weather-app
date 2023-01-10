@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import swal from 'sweetalert';
 
 export const WeatherPage = () => {
     let appId = "68c02f7a9cd3ec9754de9eeeb7592328";
@@ -24,8 +25,13 @@ export const WeatherPage = () => {
                 .then(result => result.json())
                 .then(result => {
                     if(result.cod === "404"){
-                        alert(result.message.charAt(0).toUpperCase() + result.message.slice(1))
-                        return
+                        return swal({
+                            title: "Not found",
+                            text: "There's not any city with this name. Please try with a correct name.",
+                            icon: "warning",
+                            button: "Search again",
+                            allowOutsideClick: false
+                        }).then();
                     }
                     setWeather(result)
                 })
@@ -36,6 +42,7 @@ export const WeatherPage = () => {
         console.log(weather)
     },[weather])
 
+    let cityName = weather && weather.name;
     let climate = weather && weather.weather[0].main;
     useEffect( () => {
         let srcAudio;
@@ -54,6 +61,9 @@ export const WeatherPage = () => {
                 case "Clear":
                     srcAudio = "/birds.mp3";
                     break;
+                case "Snow":
+                    srcAudio = "/snow.mp3";
+                    break;
                 default:
                     return
             }
@@ -62,7 +72,7 @@ export const WeatherPage = () => {
             bgAudio.play().then();
             return () => bgAudio.pause();
         }
-    }, [climate, weather.name])
+    }, [climate, cityName])
 
     return(
         <div className={`weather-page ${weather && climate === "Clear" ? "clear" : weather && climate === "Clouds" ? "cloudy" : weather && (climate === "Rain" || climate === "Drizzle") ? "rainy" : weather && climate === "Thunderstorm" ? "thunder" : weather && climate === "Snow" ? "snow" : weather && (climate === "Fog" || climate === "Mist" || climate === "Haze") ? "foggy" : weather && climate === "Dust" ? "dust" : weather && (climate === "Tornado" || climate === "Squall") ? "tornado" : ""}`}>
@@ -73,7 +83,7 @@ export const WeatherPage = () => {
             {weather &&
                 <div className="weather-box">
                     <h2>{weather.name}-{weather.sys.country}</h2>
-                    <div className="condition-row"><span>{Math.round((weather.main.temp - 32) * 5/9)}&deg;</span><span>{weather.weather[0].description}</span><img src={"http://openweathermap.org/img/wn/" + weather.weather[0].icon + ".png"} alt="icon" /></div>
+                    <div className="condition-row"><span>{Math.round((weather.main.temp - 32) * 5/9)}&deg; C</span><span>{weather.weather[0].description}</span><img src={"http://openweathermap.org/img/wn/" + weather.weather[0].icon + ".png"} alt="icon" /></div>
                     <hr />
                     <div>Humidity Levels at {weather.main.humidity}%</div>
                     <div style={{marginTop: '8px'}}>Winds at {weather.wind.speed} m/s</div>
