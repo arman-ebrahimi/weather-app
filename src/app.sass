@@ -32,6 +32,7 @@
 .tornado
   background: url("/images/tornado.png") no-repeat
   background-size: cover
+
 .search-box
   text-align: center
   width: 100%
@@ -79,5 +80,14 @@
     color: white
   div:nth-of-type(2), div:nth-of-type(3)
     text-align: right
+
+@media screen and (max-width: 778px) and (orientation: landscape)
+  .search-box
+    top: 2%
+    input
+      width: 150px
+  .weather-box
+    width: 250px
+    padding: 20px
 
 
