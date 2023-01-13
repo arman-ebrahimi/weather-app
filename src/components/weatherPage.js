@@ -7,6 +7,7 @@ export const WeatherPage = () => {
     let searchMethod;
     const [text, setText] = useState("");
     const [weather, setWeather] = useState(null);
+    const [wait, setWait] = useState(false);
     const handleChange = (e) => {
         setText(e.target.value)
     }
@@ -19,6 +20,7 @@ export const WeatherPage = () => {
         }
     }
     const sendRequest = () => {
+        setWait(true)
         if(text){
             getSearchMethod(text);
             fetch(`https://api.openweathermap.org/data/2.5/weather?${searchMethod}=${text}&APPID=${appId}&units=${units}`)
@@ -31,9 +33,10 @@ export const WeatherPage = () => {
                             icon: "warning",
                             button: "Search again",
                             allowOutsideClick: false
-                        }).then();
+                        }).then(() => setWait(false));
                     }
                     setWeather(result)
+                    setWait(false)
                 })
         }
     }
@@ -80,6 +83,7 @@ export const WeatherPage = () => {
                 <input type="text" onChange={handleChange} placeholder="City number or zip code" />
                 <button onClick={sendRequest}>Search</button>
             </div>
+            {wait && <div className="wait fa fa-spinner"></div>}
             {weather &&
                 <div className="weather-box">
                     <h2>{weather.name}-{weather.sys.country}</h2>
